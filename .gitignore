@@ -1,5 +1,16 @@
+# Node modules and dependencies
 node_modules/
-.env
 package-lock.json
 yarn.lock
+
+# Environment files
+# .env
+# .env.local
+.env.production
+.env.production.local
+
+# Logs
 *.log
+
+# Build output
+dist/

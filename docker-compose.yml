@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: ${NODE_ENV} # Set at runtime, Docker Compose will use .env value
+      API_URL: ${API_URL}
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      LOG_LEVEL: ${LOG_LEVEL}
+      PORT: ${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/usr/src/app # Syncs local files with container for easy development
+    # command: npm start # Override default command to start the app
+
+networks:
+  my-custom-network:
+    name: custom-network-name # Sets a specific network name

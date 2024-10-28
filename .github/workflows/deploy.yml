@@ -1,0 +1,49 @@
+name: Deploy to Docker Registry
+
+on:
+  push:
+    branches:
+      - main # Deploy on pushes to main; adjust if needed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and tag Docker image
+        env:
+          NODE_ENV: production
+          API_URL: ${{ secrets.API_URL }}
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_IMAGE_REPOSITORY: ${{ secrets.DOCKER_IMAGE_REPOSITORY }}
+        run: |
+          docker build --build-arg NODE_ENV=$NODE_ENV \
+                       --build-arg API_URL=$API_URL \
+                       --build-arg DB_CONNECTION_STRING=$DB_CONNECTION_STRING \
+                       -t $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_REPOSITORY:${{ github.sha }} .
+
+      - name: Push Docker image
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_IMAGE_REPOSITORY: ${{ secrets.DOCKER_IMAGE_REPOSITORY }}
+        run: |
+          docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_REPOSITORY:${{ github.sha }}
+
+      - name: Deploy to Environment (optional)
+        run: |
+          echo "Deployment logic here"
