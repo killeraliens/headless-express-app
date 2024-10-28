@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 const router = express.Router();
 
 router.get('/databricks', (req: Request, res: Response) => {
-    // use services to make the API call to Databricks here
+    // replace with controller services to make the API call to Databricks
 
     const response = {
         status: 'success',
@@ -15,7 +15,7 @@ router.get('/databricks', (req: Request, res: Response) => {
 });
 
 router.post('/databricks', (req: Request, res: Response) => {
-    // use services to make the API call to Databricks here
+    // replace with controller services to make the API call to Databricks
 
     const response = {
         status: 'success',

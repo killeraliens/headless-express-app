@@ -34,7 +34,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 const server = app.listen(port, () => {
-  logger.info(`Server running on port ${port}`);
+  logger.info(`Server running on port ${port}, Environment ${process.env.NODE_ENV}`);
 });
 
 // Graceful shutdown
